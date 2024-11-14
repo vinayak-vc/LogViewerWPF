@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -7,6 +8,9 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+
+using LogViewerAppWPF;
 
 using Microsoft.Win32;
 
@@ -42,6 +46,7 @@ namespace LogViewerApp {
                 return;
 
             logs = ParseLogs(File.ReadAllText(fileDialog.FileName));
+
             logs.ForEach(log => {
                 if (log.LogLevel != "Exception") {
                     log.StackTraceFull = Utilites.GetTruncatedStackTrace(log.StackTraceFull);
@@ -50,14 +55,24 @@ namespace LogViewerApp {
                 (log.ClassTraceFull, log.ClassTrace1st) = Utilites.ExtractClassNamesAndLineNumbers(log.StackTraceFull);
 
                 log.ClassTrace = log.ClassTrace1st;
-                DateTime myDate = DateTime.ParseExact(log.Timestamp, "MM/dd/yyyy HH:mm:ss",
-                                       System.Globalization.CultureInfo.InvariantCulture);
-                log.Timestamp = myDate.ToString("dd/MM/yyyy HH:mm:ss");
+                //DateTime myDate = DateTime.Parse(log.Timestamp, System.Globalization.CultureInfo.InvariantCulture);
+                //log.Timestamp = myDate.ToString("dd/MM/yyyy HH:mm:ss");
             });
+
+            if (PageSizeComboBox.Items.Count <= 0) {
+                for (int i = 0; i < pagesizeArray.Length; i++) {
+                    PageSizeComboBox.Items.Insert(i, pagesizeArray[i]);
+                }
+            }
+
             UpdateDisplay();
         }
 
         private List<LogEntry> ParseLogs(string logText) {
+            if ((bool)Encrypted.IsChecked) {
+                logText = EncryptDecrypt.Decrypt(logText);
+            }
+
             Regex logEntryPattern = new(
                 @"(?<TimeStamp>\d{2}/\d{2}/\d{4} \d{2}:\d{2}:\d{2}) - (?<LogLevel>\w+)\r?\n(?<Message>.*?)\r?\n(?<StackTrace>(?:.|\r?\n)+?)(?=\r?\n\d{2}/\d{2}/\d{4} \d{2}:\d{2}:\d{2} - \w+|$)",
                 RegexOptions.Singleline);
@@ -197,8 +212,28 @@ namespace LogViewerApp {
             UpdateDisplay();
         }
 
+        //private void ThemeToggleButton_Checked(object sender, RoutedEventArgs e) {
+        //    SetNightMode();
+        //    ThemeToggleButton.Content = "☀️ Day Mode";
+        //}
+
+        //private void ThemeToggleButton_Unchecked(object sender, RoutedEventArgs e) {
+        //    SetDayMode();
+        //    ThemeToggleButton.Content = "🌙 Night Mode";
+        //}
+
+        private void SetNightMode() {
+            this.Background = Brushes.Black;
+            this.Foreground = Brushes.White;
+        }
+
+        private void SetDayMode() {
+            this.Background = Brushes.White;
+            this.Foreground = Brushes.Black;
+        }
+
         private int[] pagesizeArray = new int[] {
-            10,255,50,100
+            10,25,50,100
         };
     }
 

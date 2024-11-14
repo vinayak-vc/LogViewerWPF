@@ -2,61 +2,53 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:av="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="av" x:Class="LogViewerApp.MainWindow"
-        Title="Enhanced Log Viewer" Height="600" Width="800">
+        Title="Enhanced Log Viewer" Width="800" Height="600">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="281*" />
-            <ColumnDefinition Width="119*" />
+            <ColumnDefinition Width="95*" />
+            <ColumnDefinition Width="50*" />
+            <ColumnDefinition Width="75*" />
+            <ColumnDefinition Width="342*" />
+            <ColumnDefinition Width="238*" />
         </Grid.ColumnDefinitions>
         <!-- Control Panel for Search, Filters, and Buttons -->
-        <StackPanel Orientation="Vertical" Margin="10,10,10,10" Grid.ColumnSpan="2">
+        <StackPanel Orientation="Vertical" Margin="10,10,10,10" Grid.ColumnSpan="5">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+
+                <Button Content="Load Log File" Click="LoadFileButton_Click" Margin="5" RenderTransformOrigin="5.153,0.71" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                <CheckBox Content="Encrypted" IsChecked="True" x:Name="Encrypted" Margin="5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+
                 <!-- Search Bar -->
-                <TextBox x:Name="SearchBox" Width="200" Margin="5" />
-                <Button Content="Search" Click="SearchButton_Click" Margin="5" />
+                <TextBox x:Name="SearchBox" Width="200" Margin="5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                <Button Content="Search" Click="SearchButton_Click" Margin="5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
                 <!-- Filter Checkboxes -->
-                <CheckBox Content="Log" IsChecked="True" x:Name="LogFilter" Margin="5" />
-                <CheckBox Content="Warning" IsChecked="True" x:Name="WarningFilter" Margin="5" />
-                <CheckBox Content="Error" IsChecked="True" x:Name="ErrorFilter" Margin="5" />
-                <CheckBox Content="Collapse" x:Name="CollapseFilter" Margin="5" />
+                <CheckBox Content="Log" IsChecked="True" x:Name="LogFilter" Margin="5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                <CheckBox Content="Warning" IsChecked="True" x:Name="WarningFilter" Margin="5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                <CheckBox Content="Error" IsChecked="True" x:Name="ErrorFilter" Margin="5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                <CheckBox Content="Collapse" x:Name="CollapseFilter" Margin="5" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
             </StackPanel>
             <!-- Date Filters -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="5,0,10,0">
                 <TextBlock Text="Start Date" VerticalAlignment="Center" />
                 <DatePicker x:Name="StartDatePicker" Width="150" Margin="5" SelectedDateFormat="Long" IsTodayHighlighted="False" />
 
                 <TextBlock Text="End Date" VerticalAlignment="Center" />
                 <DatePicker x:Name="EndDatePicker" Width="150" Margin="5" SelectedDateFormat="Long" IsTodayHighlighted="False" />
                 <Button Content="Filter" Click="FilterButton_Click" Margin="5" />
+                <Button x:Name="ExpandAllButton" Content="Expand All" Click="ExpandAllButton_Click" Margin="5" />
             </StackPanel>
             <!-- Load File and Expand/Collapse Button -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="5">
-                <Button Content="Load Log File" Click="LoadFileButton_Click" Margin="5" />
-                <Button x:Name="ExpandAllButton" Content="Expand All" Click="ExpandAllButton_Click" Margin="5" />
-                <!--</StackPanel>
-            -->
-                <!-- Pagination controls -->
-                <!--
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">-->
-                <Button Content="Previous" Click="PreviousPage_Click" Width="NaN" Height="24" />
-                <TextBlock x:Name="PageInfo" Text="{Binding PageInfo}" Margin="10" VerticalAlignment="Center" />
-                <Button Content="Next" Click="NextPage_Click" Height="24" />
-                <ComboBox x:Name="PageSizeComboBox" Width="89" RenderTransformOrigin="0.5,0.5" Height="25" SelectionChanged="PageSizeComboBox_SelectionChanged">
-                    <ComboBox.RenderTransform>
-                        <TransformGroup>
+            <StackPanel Margin="10,5,5,5" Height="27" Orientation="Horizontal" HorizontalAlignment="Right">
 
-                            <TranslateTransform X="53" />
-                        </TransformGroup>
-                    </ComboBox.RenderTransform>
-                    <ComboBoxItem Content="10" />
-                    <ComboBoxItem Content="25" />
-                    <ComboBoxItem Content="50" />
-                    <ComboBoxItem Content="100" />
+                <Button Content="Previous" Click="PreviousPage_Click" Height="24" />
+                <TextBlock x:Name="PageInfo" Text="{Binding PageInfo}" Margin="10,5,10,5" />
+                <Button Content="Next" Click="NextPage_Click" HorizontalContentAlignment="Right" Padding="10,1,10,1" VerticalContentAlignment="Center" RenderTransformOrigin="0,0.5" />
+                <ComboBox x:Name="PageSizeComboBox" RenderTransformOrigin="0.5,0.5" SelectionChanged="PageSizeComboBox_SelectionChanged" Margin="20,0,0,0">
                 </ComboBox>
             </StackPanel>
         </StackPanel>
 
-        <ListView x:Name="logListView" Margin="10,113,10,10" MouseDoubleClick="LogListView_MouseDoubleClick" av:ItemsSource="{av:SampleData ItemCount=5}" Grid.ColumnSpan="2">
+        <ListView x:Name="logListView" Margin="10,113,10,10" MouseDoubleClick="LogListView_MouseDoubleClick" av:ItemsSource="{av:SampleData ItemCount=5}" Grid.ColumnSpan="5">
             <ListView.View>
                 <GridView>
                     <!-- Column for Timestamp -->
